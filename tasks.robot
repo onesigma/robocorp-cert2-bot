@@ -14,6 +14,7 @@ Library             RPA.PDF
 Library             RPA.Archive
 Library             RPA.Dialogs
 Library             RPA.Robocorp.Vault
+Library             OperatingSystem
 
 
 *** Tasks ***
@@ -46,10 +47,21 @@ Order robots from RobotSpareBin Industries Inc
     #create zip with all receipt
     Archive Folder With Zip    receipts_with_images    ${OUTPUT_DIR}${/}receipts_with_images.zip
 
+    # Empty folders and delete files
+    Remove Directory    receipts_with_images    recursive=${True}
+    Remove Directory    receipts    recursive=${True}
+    Remove Directory    robot_images    recursive=${True}
+    Remove File    orders.csv
+
 
 *** Keywords ***
 create order
     [Arguments]    ${order}
+
+    #create required folders
+    Create Directory    receipts_with_images
+    Create Directory    receipts
+    Create Directory    robot_images
 
     # wait for popup to appear
     Wait Until Page Contains Element    class:modal-body
